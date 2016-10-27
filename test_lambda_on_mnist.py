@@ -17,7 +17,9 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers.core import Lambda
 from keras.utils import np_utils
 from keras import backend as K
-
+import tensorflow as tf
+sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+K.set_session(sess)
 K.set_learning_phase(1)
 
 def fun(X):
