@@ -25,7 +25,7 @@ dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
 
 def cross_input(X):
-    dtype = K.dtype(X)
+    dtype = K.dtype(X[0])
     tensor_left = X[0]
     tensor_right = X[1]
     #x_length = K.shape(X)[1]
