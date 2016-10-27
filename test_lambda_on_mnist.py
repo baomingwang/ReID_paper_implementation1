@@ -17,8 +17,8 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers.core import Lambda
 from keras.utils import np_utils
 from keras import backend as K
-import tensorflow as tf
-K._LEARNING_PHASE = tf.constant(0)
+
+K.set_learning_phase(1)
 
 def fun(X):
     x = K.get_value(X)
