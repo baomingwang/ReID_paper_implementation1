@@ -21,10 +21,7 @@ from keras import backend as K
 K.set_learning_phase(1)
 
 def fun(X):
-    x = K.get_value(X)
-    Y = K.placeholder(K.shape(X))
-    K.set_value(Y,x)
-    return Y
+    return X + X
     
 def fun_shape(X):
     return K.shape(X)
