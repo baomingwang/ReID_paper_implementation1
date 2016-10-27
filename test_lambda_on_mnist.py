@@ -22,11 +22,6 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_pl
 K.set_session(sess)
 K.set_learning_phase(1)
 
-def fun(X):
-    return X + X
-    
-def fun_shape(X):
-    return K.shape(X)
 
 batch_size = 128
 nb_classes = 10
@@ -75,7 +70,7 @@ model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=pool_size))
 model.add(Dropout(0.25))
-model.add(Lambda(fun,output_shape=fun_shape))
+model.add(Lambda(lambda x:x*2))
 model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('relu'))
