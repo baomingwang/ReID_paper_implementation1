@@ -20,7 +20,8 @@ from keras import backend as K
 
 def fun(X):
     x = K.get_value(X)
-    Y = K.variable(x)
+    Y = K.placeholder(K.shape(X))
+    K.set_value(Y,x)
     return Y
     
 def fun_shape(X):
@@ -90,3 +91,5 @@ model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
 score = model.evaluate(X_test, Y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
+
+
