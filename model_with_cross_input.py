@@ -27,8 +27,10 @@ dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 def cross_input(X):
     tensor_left = X[0]
     tensor_right = X[1]
-    x_length = K.shape(X)[1]
-    y_length = K.shape(X)[2]
+    #x_length = K.shape(X)[1]
+    x_length = 37
+    #y_length = K.shape(X)[2]
+    y_length = 12
     cross_y = []
     cross_x = []
     tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
