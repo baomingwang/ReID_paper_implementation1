@@ -5,6 +5,7 @@ Created on Thu Oct 27 14:27:33 2016
 @author: dingning
 """
 
+
 from __future__ import print_function
 import numpy as np
 np.random.seed(1337)  # for reproducibility
@@ -22,6 +23,8 @@ def fun(X):
     Y = K.variable(x)
     return Y
     
+def fun_shape(X):
+    return K.shape(X)
 
 batch_size = 128
 nb_classes = 10
@@ -70,7 +73,7 @@ model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=pool_size))
 model.add(Dropout(0.25))
-model.add(Lambda(fun,output_shape=))
+model.add(Lambda(fun,output_shape=fun_shape))
 model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('relu'))
@@ -87,5 +90,3 @@ model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
 score = model.evaluate(X_test, Y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
-
-
