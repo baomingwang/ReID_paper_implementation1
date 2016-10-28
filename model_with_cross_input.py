@@ -34,7 +34,7 @@ def concat_iterat(input_tensor):
         y_axis = []
     return K.concatenate(x_axis, axis=1)
 
-def cross_input(X):
+def cross_input_both(X):
     tensor_left = X[0]
     tensor_right = X[1]
     x_length = K.int_shape(tensor_left)[1]
@@ -60,11 +60,50 @@ def cross_input(X):
     cross_out_right = K.concatenate(cross_x_right,axis=1)
     cross_out = K.concatenate([cross_out_left, cross_out_right], axis=3)
     return K.abs(cross_out)
-    
-def cross_input_shape(input_shapes):
+
+ def cross_input_1(X):
+    tensor_left = X[0]
+    tensor_right = X[1]
+    x_length = K.int_shape(tensor_left)[1]
+    y_length = K.int_shape(tensor_left)[2]
+    cross_y = []
+    cross_x = []
+    tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
+    tensor_right_padding = K.spatial_2d_padding(tensor_right,padding=(2,2))
+    for i_x in range(2, x_length + 2):
+        for i_y in range(2, y_length + 2):
+            cross_y.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
+                         - concat_iterat(tensor_right_padding[:,i_x,i_y,:]))
+        cross_x.append(K.concatenate(cross_y,axis=2))
+        cross_y = []
+    cross_out = K.concatenate(cross_x,axis=1)
+    return K.abs(cross_out)
+
+def cross_input_2(X):
+    tensor_left = X[0]
+    tensor_right = X[1]
+    x_length = K.int_shape(tensor_left)[1]
+    y_length = K.int_shape(tensor_left)[2]
+    cross_y = []
+    cross_x = []
+    tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
+    tensor_right_padding = K.spatial_2d_padding(tensor_right,padding=(2,2))
+    for i_x in range(2, x_length + 2):
+        for i_y in range(2, y_length + 2):
+            cross_y.append(concat_iterat(tensor_right_padding[:,i_x,i_y,:]) 
+                         - tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:])
+        cross_x.append(K.concatenate(cross_y,axis=2))
+        cross_y = []
+    cross_out = K.concatenate(cross_x,axis=1)
+    return K.abs(cross_out)
+
+def cross_input_shape_both(input_shapes):
     input_shape = input_shapes[0]
     return (input_shape[0],input_shape[1] * 5,input_shape[2] * 5,input_shape[3]*2)
-    
+
+def cross_input_shape_single(input_shapes):
+    input_shape = input_shapes[0]
+    return (input_shape[0],input_shape[1] * 5,input_shape[2] * 5,input_shape[3])    
     
 a1 = Input(shape=(128,64,3))
 b1 = Input(shape=(128,64,3))
@@ -82,13 +121,19 @@ a6 = Activation('relu')(a5)
 b6 = Activation('relu')(b5)
 a7 = MaxPooling2D(dim_ordering='tf')(a6)
 b7 = MaxPooling2D(dim_ordering='tf')(b6)
-c1 = merge([a7,b7],mode=cross_input,output_shape=cross_input_shape)
-c2 = Convolution2D(50,5,5, subsample=(5, 5), dim_ordering='tf',activation='relu')(c1)
-c3 = MaxPooling2D((2,2),dim_ordering='tf')(c2)
-c4 = Convolution2D(50,3,3,dim_ordering='tf',activation='relu')(c3)
-c5 = MaxPooling2D((2,2),dim_ordering='tf')(c4)
+a8 = merge([a7,b7],mode=cross_input_1,output_shape=cross_input_shape_single)
+b8 = merge([a7,b7],mode=cross_input_2,output_shape=cross_input_shape_single)
+a9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu')(a8)
+b9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu')(b8)
+a10 = MaxPooling2D((2,2),dim_ordering='tf')(a9)
+b10 = MaxPooling2D((2,2),dim_ordering='tf')(b9)
+a11 = Convolution2D(25,3,3,dim_ordering='tf',activation='relu')(a10)
+b11 = Convolution2D(25,3,3,dim_ordering='tf',activation='relu')(b10)
+a12 = MaxPooling2D((2,2),dim_ordering='tf')(a11)
+b12 = MaxPooling2D((2,2),dim_ordering='tf')(b11)
+c1 = K.concatenate([a12, b12], axis=-1)
 c6 = Flatten()(c5)
-c7 = Dense(10,activation='relu')(c6)
+c7 = Dense(500,activation='relu')(c6)
 c8 = Dense(2,activation='softmax')(c7)
 
 model = Model(input=[a1,b1],output=c8)
