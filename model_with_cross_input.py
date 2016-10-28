@@ -15,16 +15,13 @@ from keras.utils import np_utils
 from input_generator import DataSet
 from input_generator import load_from_file
 import pickle
-import pdb
 
 K._IMAGE_DIM_ORDERING = 'tf'
 the_filename = 'data_by_path.pkl'
 dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
 def concat_iterat(input_tensor):
-    #pdb.set_trace()
     input_expand = K.expand_dims(K.expand_dims(input_tensor, -2), -2)
-    #pdb.set_trace()
     x_axis = []
     y_axis = []
     for x_i in range(5):
@@ -125,10 +122,10 @@ a8 = merge([a7,b7],mode=cross_input_1,output_shape=cross_input_shape_single)
 b8 = merge([a7,b7],mode=cross_input_2,output_shape=cross_input_shape_single)
 a9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu')(a8)
 b9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu')(b8)
-a10 = MaxPooling2D((2,2),dim_ordering='tf')(a9)
-b10 = MaxPooling2D((2,2),dim_ordering='tf')(b9)
-a11 = Convolution2D(25,3,3,dim_ordering='tf',activation='relu')(a10)
-b11 = Convolution2D(25,3,3,dim_ordering='tf',activation='relu')(b10)
+a10 = Convolution2D(25,5,5, subsample=(1,1), dim_ordering='tf',activation='relu')(a9)
+b10 = Convolution2D(25,5,5, subsample=(1,1), dim_ordering='tf',activation='relu')(b9)
+a11 = MaxPooling2D((2,2),dim_ordering='tf')(a10)
+b11 = MaxPooling2D((2,2),dim_ordering='tf')(b10)
 c1 = merge([a11, b11], mode='concat', concat_axis=-1)
 c2 = Flatten()(c1)
 c3 = Dense(500,activation='relu')(c2)
