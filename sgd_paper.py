@@ -5,7 +5,7 @@ Created on Thu Oct 27 13:33:33 2016
 @author: baoming
 """
 
-from keras.optimizers import SGD
+from keras.optimizers import *
 
 class SGD_paper(SGD):
   '''Stochastic gradient descent, with support for momentum,
@@ -17,7 +17,7 @@ class SGD_paper(SGD):
         decay: float >= 0. Learning rate decay over each update.
         nesterov: boolean. Whether to apply Nesterov momentum.
     '''
-    def __init__(self, lr=0.01, momentum=0., decay=0.,
+  def __init__(self, lr=0.01, momentum=0., decay=0.,
                  nesterov=False, **kwargs):
         super(SGD, self).__init__(**kwargs)
         self.__dict__.update(locals())
