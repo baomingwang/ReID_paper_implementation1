@@ -61,7 +61,7 @@ def cross_input_both(X):
     cross_out = K.concatenate([cross_out_left, cross_out_right], axis=3)
     return K.abs(cross_out)
 
- def cross_input_1(X):
+def cross_input_1(X):
     tensor_left = X[0]
     tensor_right = X[1]
     x_length = K.int_shape(tensor_left)[1]
