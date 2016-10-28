@@ -63,7 +63,7 @@ def cross_input(X):
     
 def cross_input_shape(input_shapes):
     input_shape = input_shapes[0]
-    return (input_shape[0],input_shape[1] * 5,input_shape[2] * 5,input_shape[3])
+    return (input_shape[0],input_shape[1] * 5,input_shape[2] * 5,input_shape[3]*2)
     
     
 a1 = Input(shape=(128,64,3))
