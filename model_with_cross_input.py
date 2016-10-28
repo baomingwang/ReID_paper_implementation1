@@ -46,9 +46,9 @@ def cross_input(X):
     for i_x in range(2, x_length + 2):
         for i_y in range(2, y_length + 2):
             cross_y_left.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
-                         - cancat_iterat(tensor_right_padding[:,i_x,i_y,:]))
+                         - concat_iterat(tensor_right_padding[:,i_x,i_y,:]))
             cross_y_right.append(tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
-                         - cancat_iterat(tensor_left_padding[:,i_x,i_y,:]))
+                         - concat_iterat(tensor_left_padding[:,i_x,i_y,:]))
         cross_x_left.append(K.concatenate(cross_y_left, axis=2))
         cross_x_right.append(K.concatenate(cross_y_right, axis=2))
         cross_y_left = []
