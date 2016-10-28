@@ -105,8 +105,8 @@ def cross_input_shape_single(input_shapes):
     input_shape = input_shapes[0]
     return (input_shape[0],input_shape[1] * 5,input_shape[2] * 5,input_shape[3])    
     
-a1 = Input(shape=(128,64,3))
-b1 = Input(shape=(128,64,3))
+a1 = Input(shape=(160,60,3))
+b1 = Input(shape=(160,60,3))
 share = Convolution2D(20,5,5,dim_ordering='tf')
 a2 = share(a1)
 b2 = share(b1)
@@ -132,7 +132,7 @@ b11 = Convolution2D(25,3,3,dim_ordering='tf',activation='relu')(b10)
 c1 = merge([a11, b11], mode='concat', concat_axis=-1)
 c2 = Flatten()(c1)
 c3 = Dense(500,activation='relu')(c2)
-c4 = Dense(1,activation='softmax')(c3)
+c4 = Dense(2,activation='softmax')(c3)
 
 model = Model(input=[a1,b1],output=c4)
 model.summary()    
