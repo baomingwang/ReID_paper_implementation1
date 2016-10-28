@@ -61,8 +61,8 @@ class SGD_new(SGD):
 inputs = Input(shape=(784,))
 
 # a layer instance is callable on a tensor, and returns a tensor
-x = Dense(64, activation='relu', activity_regularizer=l2(l=0.0005))(inputs)
-x = Dense(64, activation='relu', activity_regularizer=l2(l=0.0005))(x)
+x = Dense(64, activation='relu', W_regularizer=l2(l=0.0005))(inputs)
+x = Dense(64, activation='relu', W_regularizer=l2(l=0.0005))(x)
 predictions = Dense(10, activation='softmax')(x)
 '''
 a1 = Input(shape=(128,64,3))
