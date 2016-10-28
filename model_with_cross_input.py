@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Oct 27 19:14:35 2016
-
 @author: dingning
 """
 import numpy as np
@@ -35,8 +34,8 @@ def cross_input(X):
     cross_x = []
     tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
     tensor_right_padding = K.spatial_2d_padding(tensor_right,padding=(2,2))
-    for i_x in range(2, x_length - 2):
-        for i_y in range(2, y_length - 2):
+    for i_x in range(2, x_length + 2):
+        for i_y in range(2, y_length + 2):
             cross_y.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
                          - tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:])
         cross_x.append(K.concatenate(cross_y,axis=2))
@@ -74,5 +73,3 @@ c8 = Dense(2,activation='softmax')(c7)
 
 model = Model(input=[a1,b1],output=c8)
 model.summary()    
-    
-    
