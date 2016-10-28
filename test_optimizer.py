@@ -8,8 +8,8 @@ from keras.utils import np_utils
 import pickle
 from keras import backend as K
 
-class SGD_paper(SGD):
-  '''Stochastic gradient descent, with support for momentum,
+class SGD(Optimizer):
+    '''Stochastic gradient descent, with support for momentum,
     learning rate decay, and Nesterov momentum.
 
     # Arguments
