@@ -22,6 +22,8 @@ the_filename = 'data_by_path.pkl'
 dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
 def concat_iterat(input_tensor):
+    K.expand_dims(input_tensor, -2)
+    K.expand_dims(input_tensor, -2)
     x_axis = []
     y_axis = []
     for x_i in range(5):
