@@ -39,6 +39,7 @@ def cross_input(X):
             cross_y.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
                          - tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:])
         cross_x.append(K.concatenate(cross_y,axis=2))
+        cross_y = []
     cross_out = K.concatenate(cross_x,axis=1)
     return K.abs(cross_out)
     
