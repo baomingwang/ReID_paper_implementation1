@@ -2,8 +2,8 @@ import numpy as np
 np.random.seed(1234)
 from keras.models import Model
 from keras.layers import Input,Dense,Convolution2D,Activation,MaxPooling2D,Flatten,merge
-#from sgd_paper import SGD_paper
-from keras.optimizers import *
+from keras.optimizers import SGD
+from keras.regularizers import l2
 from keras.utils import np_utils
 import pickle
 from keras import backend as K
