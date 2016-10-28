@@ -57,7 +57,14 @@ class SGD_new(SGD):
 
             self.updates.append(K.update(p, new_p))
         return self.updates
+# this returns a tensor
+inputs = Input(shape=(784,))
 
+# a layer instance is callable on a tensor, and returns a tensor
+x = Dense(64, activation='relu', activity_regularizer=l2(l=0.0005))(inputs)
+x = Dense(64, activation='relu', activity_regularizer=l2(l=0.0005))(x)
+predictions = Dense(10, activation='softmax')(x)
+'''
 a1 = Input(shape=(128,64,3))
 b1 = Input(shape=(128,64,3))
 share = Convolution2D(20,5,5,dim_ordering='tf', activity_regularizer=l2(l=0.0005))
@@ -82,8 +89,9 @@ c5 = MaxPooling2D((2,2),dim_ordering='tf')(c4)
 c6 = Flatten()(c5)
 c7 = Dense(10,activation='relu', activity_regularizer=l2(l=0.0005))(c6)
 c8 = Dense(2,activation='softmax')(c7)
+'''
 
-model = Model(input=[a1,b1],output=c8)
+model = Model(inputs, output=predictions)
 model.summary()
 
 sgd = SGD_new(lr=0.01, momentum=0.9)
