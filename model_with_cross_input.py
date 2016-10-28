@@ -22,15 +22,14 @@ the_filename = 'data_by_path.pkl'
 dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
 def concat_iterat(input_tensor):
-    pdb.set_trace()
-    K.expand_dims(input_tensor, -2)
-    pdb.set_trace()
-    K.expand_dims(input_tensor, -2)
+    #pdb.set_trace()
+    input_expand = K.expand_dims(K.expand_dims(input_tensor, -2), -2)
+    #pdb.set_trace()
     x_axis = []
     y_axis = []
     for x_i in range(5):
         for y_i in range(5):
-            y_axis.append(input_tensor)
+            y_axis.append(input_expand)
         x_axis.append(K.concatenate(y_axis, axis=2))
         y_axis = []
     return K.concatenate(x_axis, axis=1)
