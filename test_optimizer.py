@@ -8,7 +8,7 @@ from keras.utils import np_utils
 import pickle
 from keras import backend as K
 
-class SGD(Optimizer):
+class SGD_new(SGD):
     '''Stochastic gradient descent, with support for momentum,
     learning rate decay, and Nesterov momentum.
 
@@ -86,8 +86,8 @@ c8 = Dense(2,activation='softmax')(c7)
 model = Model(input=[a1,b1],output=c8)
 model.summary()
 
-sgd = SGD_paper(lr=0.01, momentum=0.9)
+sgd = SGD_new(lr=0.01, momentum=0.9)
 
-model.compile(optimizer='RMSprop',
+model.compile(optimizer=sgd,
 loss='categorical_crossentropy',
 metrics=['accuracy'])
