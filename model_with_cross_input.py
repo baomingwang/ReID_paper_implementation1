@@ -21,24 +21,41 @@ K._IMAGE_DIM_ORDERING = 'tf'
 the_filename = 'data_by_path.pkl'
 dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
-
+def concat_iterat(input_tensor):
+    x_axis = []
+    y_axis = []
+    for x_i in range(5):
+        for y_i in range(5):
+            y_axis.append(input_tensor)
+        x_axis.append(K.concatenate(y_axis, axis=2))
+        y_axis = []
+    return K.concatenate(x_axis, axis=1)
 
 def cross_input(X):
     tensor_left = X[0]
     tensor_right = X[1]
     x_length = K.int_shape(tensor_left)[1]
     y_length = K.int_shape(tensor_left)[2]
-    cross_y = []
-    cross_x = []
+    cross_y_left = []
+    cross_x_left = []
+    cross_y_right = []
+    cross_x_right = []
+    scalar = K.ones([5,5])
     tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
     tensor_right_padding = K.spatial_2d_padding(tensor_right,padding=(2,2))
     for i_x in range(2, x_length + 2):
         for i_y in range(2, y_length + 2):
-            cross_y.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
-                         - tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:])
-        cross_x.append(K.concatenate(cross_y,axis=2))
-        cross_y = []
-    cross_out = K.concatenate(cross_x,axis=1)
+            cross_y_left.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
+                         - cancat_iterat(tensor_right_padding[:,i_x,i_y,:]))
+            cross_y_right.append(tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
+                         - cancat_iterat(tensor_left_padding[:,i_x,i_y,:]))
+        cross_x_left.append(K.concatenate(cross_y_left, axis=2))
+        cross_x_right.append(K.concatenate(cross_y_right, axis=2))
+        cross_y_left = []
+        cross_y_right = []
+    cross_out_left = K.concatenate(cross_x_left,axis=1)
+    cross_out_right = K.concatenate(cross_x_right,axis=1)
+    cross_out = K.concatenate([cross_out_left, cross_out_right], axis=3)
     return K.abs(cross_out)
     
 def cross_input_shape(input_shapes):
