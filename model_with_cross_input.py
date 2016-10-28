@@ -15,14 +15,16 @@ from keras.utils import np_utils
 from input_generator import DataSet
 from input_generator import load_from_file
 import pickle
-
+import pdb
 
 K._IMAGE_DIM_ORDERING = 'tf'
 the_filename = 'data_by_path.pkl'
 dir_path = '/home/ubuntu/dataset/market1501/boundingboxtrain'
 
 def concat_iterat(input_tensor):
+    pdb.set_trace()
     K.expand_dims(input_tensor, -2)
+    pdb.set_trace()
     K.expand_dims(input_tensor, -2)
     x_axis = []
     y_axis = []
