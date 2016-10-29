@@ -109,7 +109,7 @@ def cross_input_both(X):
     cross_out = K.concatenate([cross_out_left, cross_out_right], axis=3)
     return K.abs(cross_out)
 
-def cross_input_1(X):
+def cross_input_single(X):
     tensor_left = X[0]
     tensor_right = X[1]
     x_length = K.int_shape(tensor_left)[1]
@@ -122,24 +122,6 @@ def cross_input_1(X):
         for i_y in range(2, y_length + 2):
             cross_y.append(tensor_left_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:] 
                          - concat_iterat(tensor_right_padding[:,i_x,i_y,:]))
-        cross_x.append(K.concatenate(cross_y,axis=2))
-        cross_y = []
-    cross_out = K.concatenate(cross_x,axis=1)
-    return K.abs(cross_out)
-
-def cross_input_2(X):
-    tensor_left = X[0]
-    tensor_right = X[1]
-    x_length = K.int_shape(tensor_left)[1]
-    y_length = K.int_shape(tensor_left)[2]
-    cross_y = []
-    cross_x = []
-    tensor_left_padding = K.spatial_2d_padding(tensor_left,padding=(2,2))
-    tensor_right_padding = K.spatial_2d_padding(tensor_right,padding=(2,2))
-    for i_x in range(2, x_length + 2):
-        for i_y in range(2, y_length + 2):
-            cross_y.append(concat_iterat(tensor_right_padding[:,i_x,i_y,:]) 
-                         - tensor_right_padding[:,i_x-2:i_x+3,i_y-2:i_y+3,:])
         cross_x.append(K.concatenate(cross_y,axis=2))
         cross_y = []
     cross_out = K.concatenate(cross_x,axis=1)
@@ -169,8 +151,8 @@ a6 = Activation('relu')(a5)
 b6 = Activation('relu')(b5)
 a7 = MaxPooling2D(dim_ordering='tf')(a6)
 b7 = MaxPooling2D(dim_ordering='tf')(b6)
-a8 = merge([a7,b7],mode=cross_input_1,output_shape=cross_input_shape_single)
-b8 = merge([a7,b7],mode=cross_input_2,output_shape=cross_input_shape_single)
+a8 = merge([a7,b7],mode=cross_input_single,output_shape=cross_input_shape_single)
+b8 = merge([b7,a7],mode=cross_input_single,output_shape=cross_input_shape_single)
 a9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu', W_regularizer=l2(l=0.0005))(a8)
 b9 = Convolution2D(25,5,5, subsample=(5,5), dim_ordering='tf',activation='relu', W_regularizer=l2(l=0.0005))(b8)
 a10 = Convolution2D(25,3,3, subsample=(1,1), dim_ordering='tf',activation='relu', W_regularizer=l2(l=0.0005))(a9)
